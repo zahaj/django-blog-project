@@ -18,7 +18,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny
 from .serializers import ProjectSerializer, TechnologySerializer
 
 def project_index(request):
@@ -151,7 +151,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.select_related('category').prefetch_related('technologies').all().order_by('-created_at')
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
 
 class TechnologyViewSet(viewsets.ModelViewSet):
     """
