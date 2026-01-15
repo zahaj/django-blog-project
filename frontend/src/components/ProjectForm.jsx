@@ -51,8 +51,8 @@ function ProjectForm({ onProjectAdded }) {
       }
 
       const newProject = await response.json();
-      setMessage(`Success! Added: ${newProject.title}`);
-      onProjectAdded(); // Refresh the list
+      setMessage(`✅ Success! Project "${newProject.title}" is now live.`);
+      onProjectAdded();
       setFormData({
         title: "",
         description: "",
@@ -71,25 +71,27 @@ function ProjectForm({ onProjectAdded }) {
       style={{
         margin: "20px auto",
         padding: "20px",
-        maxWidth: "500px",
-        border: "2px solid #007bff",
-        borderRadius: "8px",
-        background: "#fff",
+        maxWidth: "600px",
+        border: "3px solid #007bff",
+        borderRadius: "12px",
+        background: "#ffffff",
+        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
       }}
     >
-      <h2 style={{ marginTop: 0, color: "#333" }}>Add a New Project</h2>
+      <h3 style={{ marginTop: 0, color: "#007bff" }}>Add a New Project</h3>
 
       {error && (
         <div
           style={{
             color: "#721c24",
             backgroundColor: "#f8d7da",
-            padding: "10px",
-            borderRadius: "4px",
+            padding: "12px",
+            borderRadius: "6px",
             marginBottom: "15px",
+            border: "1px solid #f5c6cb",
           }}
         >
-          {error}
+          <strong>Error:</strong> {error}
         </div>
       )}
 
@@ -98,19 +100,21 @@ function ProjectForm({ onProjectAdded }) {
           style={{
             color: "#155724",
             backgroundColor: "#d4edda",
-            padding: "10px",
-            borderRadius: "4px",
+            padding: "15px",
+            borderRadius: "6px",
             marginBottom: "15px",
             border: "2px solid #155724",
+            fontSize: "1.1rem",
+            textAlign: "center",
           }}
         >
-          {message}
+          <strong>{message}</strong>
         </div>
       )}
 
       <form
         onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+        style={{ display: "flex", flexDirection: "column", gap: "12px" }}
       >
         <input
           name="title"
@@ -118,7 +122,11 @@ function ProjectForm({ onProjectAdded }) {
           value={formData.title}
           onChange={handleChange}
           required
-          style={{ padding: "10px" }}
+          style={{
+            padding: "12px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
         />
         <textarea
           name="description"
@@ -126,38 +134,55 @@ function ProjectForm({ onProjectAdded }) {
           value={formData.description}
           onChange={handleChange}
           required
-          style={{ padding: "10px", minHeight: "80px" }}
+          style={{
+            padding: "12px",
+            minHeight: "100px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
         />
         <input
           name="technologies"
-          placeholder="Technologies (e.g. React, Python)"
+          placeholder="Technologies (e.g. React, Python, Docker)"
           value={formData.technologies}
           onChange={handleChange}
-          style={{ padding: "10px" }}
+          style={{
+            padding: "12px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
         />
+
+        <label style={{ fontSize: "0.9rem", color: "#666" }}>Category:</label>
         <select
           name="category"
           value={formData.category}
           onChange={handleChange}
-          style={{ padding: "10px" }}
+          style={{
+            padding: "12px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
         >
           <option value="Web Development">Web Development</option>
           <option value="Data Science">Data Science</option>
         </select>
+
         <button
           type="submit"
           disabled={isSubmitting}
           style={{
-            padding: "12px",
-            backgroundColor: "#007bff",
+            padding: "14px",
+            backgroundColor: isSubmitting ? "#ccc" : "#007bff",
             color: "white",
             border: "none",
-            borderRadius: "4px",
+            borderRadius: "6px",
             cursor: "pointer",
             fontWeight: "bold",
+            fontSize: "1rem",
           }}
         >
-          {isSubmitting ? "Sending..." : "Create Project"}
+          {isSubmitting ? "Submitting to Database..." : "🚀 Create Project"}
         </button>
       </form>
     </div>
