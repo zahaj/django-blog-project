@@ -18,3 +18,5 @@ __pycache__/
 # IDE files
 .idea/
 .vscode/
+
+docker-compose.override.yml
