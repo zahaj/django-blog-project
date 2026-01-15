@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-// Get the API URL from the environment variables (same as useProjects.js)
+// Get the API URL from the environment variables
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 function ProjectForm({ onProjectAdded }) {
   // State to hold form data
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    technologies: '', // Comma-separated string for simplicity
-    category: 1, // Defaulting to the first category ID for simplicity
-    image: '', // Optional image URL
+    title: "",
+    description: "",
+    technologies: "",
+    category: "Web Development", // Using the string name as defined in seed_db.py
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
-  // Universal handler for all inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -29,49 +27,48 @@ function ProjectForm({ onProjectAdded }) {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
-    setMessage('');
+    setMessage("");
 
-    // Prepare data
-    // Note: In a production app, we would parse 'technologies' string into a list here.
-    // For now, we send it as part of the object. 
+    const techArray = formData.technologies
+      .split(",")
+      .map((item) => item.trim())
+      .filter((item) => item !== "");
+
     const dataToSend = {
-      ...formData,
+      title: formData.title,
+      description: formData.description,
+      category: formData.category,
+      technologies: techArray,
     };
-    
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/projects/`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(dataToSend),
       });
 
       if (!response.ok) {
-        // Get the error details from the backend
         const errorData = await response.json();
         throw new Error(`Submission failed: ${JSON.stringify(errorData)}`);
       }
 
-      // Success!
       const newProject = await response.json();
       setMessage(`Project "${newProject.title}" added successfully!`);
-      
-      // Notify the parent (App.jsx) to refresh the list
+
       onProjectAdded();
 
-      // Clear the form
       setFormData({
-        title: '',
-        description: '',
-        technologies: '',
-        category: 1,
-        image: '',
+        title: "",
+        description: "",
+        technologies: "",
+        category: "Web Development",
       });
-
     } catch (err) {
-      console.error('API POST Error:', err);
-      setError(err.message || 'An unknown error occurred during submission.');
+      console.error("API POST Error:", err);
+      setError(err.message || "An unknown error occurred during submission.");
     } finally {
       setIsSubmitting(false);
     }
@@ -80,51 +77,79 @@ function ProjectForm({ onProjectAdded }) {
   return (
     <div className="project-form-container">
       <h2>Add a New Project</h2>
-      
-      {error && <div className="error-message">{error}</div>}
-      {message && <div className="success-message">{message}</div>}
+
+      {error && (
+        <div
+          className="error-message"
+          style={{ color: "red", padding: "10px", background: "#fee" }}
+        >
+          {error}
+        </div>
+      )}
+      {message && (
+        <div
+          className="success-message"
+          style={{ color: "green", padding: "10px", background: "#efe" }}
+        >
+          {message}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="project-form">
         <label>
           Title:
-          <input 
-            type="text" 
-            name="title" 
-            value={formData.title} 
-            onChange={handleChange} 
-            required 
-            disabled={isSubmitting}
-          />
-        </label>
-        
-        <label>
-          Description:
-          <textarea 
-            name="description" 
-            value={formData.description} 
-            onChange={handleChange} 
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
             required
             disabled={isSubmitting}
           />
         </label>
-        
+
         <label>
-          Technologies (comma-separated):
-          <input 
-            type="text" 
-            name="technologies" 
-            value={formData.technologies} 
-            onChange={handleChange} 
-            placeholder="e.g., Python, Django, React, CSS"
+          Description:
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
             disabled={isSubmitting}
           />
         </label>
 
-        {/* Category ID: We assume ID 1 exists. In a real app, this would be a dropdown */}
-        <input type="hidden" name="category" value={formData.category} />
+        <label>
+          Technologies (comma-separated):
+          <input
+            type="text"
+            name="technologies"
+            value={formData.technologies}
+            onChange={handleChange}
+            placeholder="e.g., Python, Django"
+            disabled={isSubmitting}
+          />
+        </label>
 
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Create Project'}
+        <label>
+          Category:
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          >
+            <option value="Web Development">Web Development</option>
+            <option value="Data Science">Data Science</option>
+          </select>
+        </label>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          style={{ marginTop: "10px" }}
+        >
+          {isSubmitting ? "Submitting..." : "Create Project"}
         </button>
       </form>
     </div>
