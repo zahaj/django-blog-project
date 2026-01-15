@@ -30,3 +30,67 @@ header h1 {
   border-bottom: 2px solid #3498db;
   padding-bottom: 10px;
 }
+
+.project-form-container {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.project-form label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.project-form input[type="text"],
+.project-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box; /* Include padding in element's total width/height */
+}
+
+.project-form button {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.error-message {
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #fdd;
+  color: #c00;
+  border: 1px solid #c00;
+  border-radius: 4px;
+}
+
+.success-message {
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #dfd;
+  color: #0c0;
+  border: 1px solid #0c0;
+  border-radius: 4px;
+}
+
+.btn-refresh {
+    margin-bottom: 20px;
+    background-color: #3498db;
+    color: white;
+}
+
+.project-list {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
