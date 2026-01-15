@@ -43,3 +43,14 @@ class ProjectSerializer(serializers.ModelSerializer):
             'category', 
             'technologies'
         )
+
+    def to_internal_value(self, data):
+        """
+        OVERRIDE: This method runs BEFORE validation.
+        It allows us to create missing Technologies on the fly.
+        """
+        if 'technologies' in data and isinstance(data['technologies'], list):
+            for tech_name in data['technologies']:
+                Technology.objects.get_or_create(name=tech_name)
+        
+        return super().to_internal_value(data)
